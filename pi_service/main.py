@@ -3,6 +3,8 @@ import yaml
 import logging
 from lib.os_detector import is_raspberrypi
 
+from lib.solenoid_controller.base_solenoid_controller import BaseSolenoidController
+
 # Cannot import GPIO Library on windows
 if is_raspberrypi():
     from lib.solenoid_controller.pi_solenoid_controller import PiSolenoidController
@@ -10,8 +12,8 @@ else:
     from lib.solenoid_controller.test_solenoid_controller import TestSolenoidController
 
 
-def main():
-    pass
+def main(solenoid_controller: BaseSolenoidController):
+    solenoid_controller.actuate()
 
 
 def load_config() -> dict:
@@ -38,4 +40,4 @@ if __name__ == "__main__":
     else:
         solenoid_controller = TestSolenoidController()
 
-    main()
+    main(solenoid_controller)
