@@ -1,1 +1,3 @@
 solenoid_gpio_pin: 11s
+host: 127.0.0.1
+port: 9916
