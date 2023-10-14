@@ -1,5 +1,6 @@
 package wearos.grahamthomas.volleyballsetter.presentation
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.CircularProgressIndicator
@@ -27,15 +29,18 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import androidx.wear.tiles.material.ButtonColors
+import com.android.volley.toolbox.Volley
 import wearos.grahamthomas.volleyballsetter.presentation.theme.VolleyballSetterWearOSTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var volleyClient = Volley.newRequestQueue(applicationContext)
+        var viewModel = SetterViewModel(volleyClient)
         setContent {
             VolleyballSetterWearOSTheme {
                 Scaffold {
-                    VolleyballSetter()
+                    VolleyballSetter(viewModel)
                 }
             }
         }
@@ -44,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun VolleyballSetter(
-    setterViewModel: SetterViewModel = viewModel()
+    setterViewModel: SetterViewModel
 ) {
     Column(
         modifier = Modifier
