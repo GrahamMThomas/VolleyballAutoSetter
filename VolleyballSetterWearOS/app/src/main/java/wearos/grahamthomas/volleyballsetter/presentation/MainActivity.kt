@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.SportsVolleyball
@@ -25,13 +26,17 @@ import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
+import androidx.wear.tiles.material.ButtonColors
+import wearos.grahamthomas.volleyballsetter.presentation.theme.VolleyballSetterWearOSTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Scaffold {
-                VolleyballSetter()
+            VolleyballSetterWearOSTheme {
+                Scaffold {
+                    VolleyballSetter()
+                }
             }
         }
     }
@@ -67,11 +72,14 @@ private fun VolleyballSetter(
             CircularProgressIndicator(
                 indicatorColor = MaterialTheme.colors.secondary,
                 trackColor = MaterialTheme.colors.onBackground.copy(alpha = 0.1f),
-                strokeWidth = 4.dp
+                strokeWidth = 6.dp,
+                modifier = Modifier.width(52.dp).height(52.dp)
             )
         } else {
             Button(onClick = { setterViewModel.requestSet() },
-                enabled = setterViewModel.setterState == SetterState.READY) {
+                enabled = setterViewModel.setterState == SetterState.READY
+            ) {
+
                 Icon(
                     imageVector = Icons.Rounded.SportsVolleyball,
                     contentDescription = "Launch Button"
@@ -80,9 +88,9 @@ private fun VolleyballSetter(
                     CircularProgressIndicator(
                         progress = setterViewModel.cooldownPercentageCompletion,
                         indicatorColor = MaterialTheme.colors.error,
-                        modifier = Modifier.width(50.dp),
+                        modifier = Modifier.width(52.dp).height(52.dp),
                         trackColor = MaterialTheme.colors.onBackground.copy(alpha = 0.1f),
-                        strokeWidth = 4.dp
+                        strokeWidth = 6.dp
                     )
                 }
             }

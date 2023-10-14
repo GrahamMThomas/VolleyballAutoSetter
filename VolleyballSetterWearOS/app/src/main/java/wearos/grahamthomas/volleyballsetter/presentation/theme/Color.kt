@@ -3,17 +3,17 @@ package wearos.grahamthomas.volleyballsetter.presentation.theme
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material.Colors
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-val Red400 = Color(0xFFCF6679)
+val Icterine = Color(0xFFE8EC67)
+val Mindaro = Color(0xFFF2F79E)
+val Celadon = Color(0xFFA8D4AD)
+val LightBlue = Color(0xFF92B9BD)
+val Red400 = Color(0xFFFA4FCF)
 
 internal val wearColorPalette: Colors = Colors(
-        primary = Purple200,
-        primaryVariant = Purple700,
-        secondary = Teal200,
-        secondaryVariant = Teal200,
+        primary = Icterine,
+        primaryVariant = Mindaro,
+        secondary = Celadon,
+        secondaryVariant = LightBlue,
         error = Red400,
         onPrimary = Color.Black,
         onSecondary = Color.Black,
