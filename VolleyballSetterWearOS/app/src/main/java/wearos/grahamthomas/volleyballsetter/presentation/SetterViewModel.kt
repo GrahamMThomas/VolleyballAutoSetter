@@ -33,7 +33,7 @@ class SetterViewModel(volleyClient: RequestQueue) : ViewModel() {
         get() = _backendHealthy.value
 
     private val TOTAL_COOLDOWN_TIME = 1.5f
-    private val ENDPOINT = "10.0.2.2:9916"
+    private val ENDPOINT = "192.168.0.153:9916"
 
     val timerPercentageCompletion: Float
         get() = 1f - (_remainingSetTime.value / _totalSetTime.value)
