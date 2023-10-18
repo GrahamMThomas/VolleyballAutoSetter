@@ -33,6 +33,7 @@ class SetterViewModel(volleyClient: RequestQueue) : ViewModel() {
         get() = _backendHealthy.value
 
     private val TOTAL_COOLDOWN_TIME = 1.5f
+    private val ENDPOINT = "10.0.2.2:9916"
 
     val timerPercentageCompletion: Float
         get() = 1f - (_remainingSetTime.value / _totalSetTime.value)
@@ -53,23 +54,7 @@ class SetterViewModel(volleyClient: RequestQueue) : ViewModel() {
 
     fun requestSet(){
         _setterState.value = SetterState.REQUESTED
-        val url = "http://10.0.2.2:9916/actuate"
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            { response ->
-                Log.d("requestSet", "Response is: $response")
-                viewModelScope.launch { handleSetCountdown() }
-            },
-            { error ->
-                Log.d("requestSet","Request Fail $error!")
-                resetState()
-                _backendHealthy.value = false
-                viewModelScope.launch { pollBackendUntilHealthy() }
-            })
-
-        stringRequest.retryPolicy = DefaultRetryPolicy(1500,0,0f)
-        _volleyClient.add(stringRequest)
-
+        viewModelScope.launch { handleSetCountdown() }
     }
 
     private suspend fun handleSetCountdown(){
@@ -81,6 +66,7 @@ class SetterViewModel(volleyClient: RequestQueue) : ViewModel() {
             _remainingSetTime.value -= timeSkip
             delay ((1000 * timeSkip).toLong())
         }
+        makeSetRequestToApi()
 
         handleCooldown()
     }
@@ -112,13 +98,31 @@ class SetterViewModel(volleyClient: RequestQueue) : ViewModel() {
     }
 
     private fun checkBackendHealth(){
-        val url = "http://10.0.2.2:9916/health"
+        val url = "http://$ENDPOINT/health"
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             { _ ->
                 _backendHealthy.value = true
             },
             { _ -> _backendHealthy.value = false })
+
+        stringRequest.retryPolicy = DefaultRetryPolicy(1500,0,0f)
+        _volleyClient.add(stringRequest)
+    }
+
+    private fun makeSetRequestToApi(){
+        val url = "http://$ENDPOINT/actuate"
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            { response ->
+                Log.d("requestSet", "Response is: $response")
+            },
+            { error ->
+                Log.d("requestSet","Request Fail $error!")
+                resetState()
+                _backendHealthy.value = false
+                viewModelScope.launch { pollBackendUntilHealthy() }
+            })
 
         stringRequest.retryPolicy = DefaultRetryPolicy(1500,0,0f)
         _volleyClient.add(stringRequest)
